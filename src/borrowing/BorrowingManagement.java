@@ -4,10 +4,14 @@ import java.io.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 
 public class BorrowingManagement {
@@ -88,7 +92,7 @@ public class BorrowingManagement {
         fileReader.close();
     }
 
-    public Borrowing parseLine(String line) {
+    private static Borrowing parseLine(String line) {
         String[] strings = line.split(",");
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate strings3Date = LocalDate.parse(strings[3], formatter);
@@ -111,10 +115,10 @@ public class BorrowingManagement {
 
     public void test() throws IOException{
     }
+
     public List<String> mostBorrowedBooks() {
-        // tạo ra 1 mảng chưa id book và tìm kiếm phần tử xuất hiện nhiều nhất trong mảng
         List<String> arrays = new ArrayList<>();
-        Map<Integer,Integer> hashMap = new HashMap<>();
+        Map<Integer, Integer> hashMap = new HashMap<>();
         for (Borrowing br : borrowings) {
             int key = Integer.parseInt(br.getBookId());
             if (hashMap.containsKey(key) == false) {
@@ -125,17 +129,92 @@ public class BorrowingManagement {
                 hashMap.put(key, value);
             }
         }
-        for (Map.Entry entry : hashMap.entrySet()) {
+        Map<Integer, Integer> sortedMap = getSortedMap(hashMap);
+        for (Map.Entry entry : sortedMap.entrySet()) {
             arrays.add("Book id " + entry.getKey() + " time " +entry.getValue() + "\n");
         }
         return arrays;
+    }
+
+    public List<String> studentsBorrowMost() {
+        // hash map
+        Map<Integer, Integer> hashMap = new HashMap<>();
+        for (Borrowing br : borrowings) {
+            int key = br.getStudentId();
+            if (hashMap.containsKey(key) == false) {
+                hashMap.put(key, 1);
+            } else {
+                int value = hashMap.get(key);
+                value++;
+                hashMap.put(key, value);
+            }
+        }
+        /*// khoi tao mot set entry
+        Set<Map.Entry<Integer, Integer>> entrySet = hashMap.entrySet();
+        // tao comparator
+        Comparator<Map.Entry> comparator = new Comparator<Map.Entry>() {
+            @Override
+            public int compare(Map.Entry o1, Map.Entry o2) {
+                if ((Integer) o1.getValue() > (Integer) o2.getValue()) {
+                    return -1;
+                } else if ((Integer) o1.getValue() < (Integer) o2.getValue()) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            }
+        };
+        //covert Set thanh List
+        List<Map.Entry> entryList = new ArrayList<>(entrySet);
+        // sap xep list
+        Collections.sort(entryList, comparator);
+        //tao mot hashmap va put cac entry tu entryList da sap xep sang
+        Map<Integer, Integer> sortedMap = new LinkedHashMap<>();
+        for (Map.Entry entry : entryList) {
+            sortedMap.put((Integer) entry.getKey(), (Integer) entry.getValue());
+        }
+        // hien thi danh sach da sap xep*/
+        Map<Integer, Integer> sortedMap = getSortedMap(hashMap);
+        List<String> arrays = new ArrayList<>();
+        for (Map.Entry entry : sortedMap.entrySet()) {
+            arrays.add("Student id " + entry.getKey() + " times " +entry.getValue() + "\n");
+        }
+        return arrays;
+    }
+
+    private static Map<Integer, Integer> getSortedMap(Map<Integer, Integer> hashMap) {
+        // khoi tao mot set entry
+        Set<Map.Entry<Integer, Integer>> entrySet = hashMap.entrySet();
+        // tao comparator
+        Comparator<Map.Entry> comparator = new Comparator<Map.Entry>() {
+            @Override
+            public int compare(Map.Entry o1, Map.Entry o2) {
+                if ((Integer) o1.getValue() > (Integer) o2.getValue()) {
+                    return -1;
+                } else if ((Integer) o1.getValue() < (Integer) o2.getValue()) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            }
+        };
+        //covert Set thanh List
+        List<Map.Entry> entryList = new ArrayList<>(entrySet);
+        // sap xep list
+        Collections.sort(entryList, comparator);
+        //tao mot hashmap va put cac entry tu entryList da sap xep sang
+        Map<Integer, Integer> sortedMap = new LinkedHashMap<>();
+        for (Map.Entry entry : entryList) {
+            sortedMap.put((Integer) entry.getKey(), (Integer) entry.getValue());
+        }
+        return sortedMap;
     }
 
     public void removeBorrowingAll() {
         borrowings.removeAll(borrowings);
     }
 
-    public boolean remoteBorrowing(int borrowId) {
+    public boolean removeBorrowing(int borrowId) {
         Borrowing borrowingRemove = searchByBorrowingId(borrowId);
         if (borrowingRemove != null) {
             borrowings.remove(borrowingRemove);

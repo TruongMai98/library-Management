@@ -12,22 +12,23 @@ public class BorrowingManagementMenu {
     BorrowingManagement borrowingManagement = new BorrowingManagement();
 
     public void displayMenu() {
-        System.out.println("============Menu============");
-        System.out.println("*     Borrow Management    *");
-        System.out.println("* 1. Add borrow            *");
-        System.out.println("* 2. Return book           *");
-        System.out.println("* 3. Search by borrow id   *");
-//        System.out.println("* 4. Search by book id     *");
-//        System.out.println("* 5. Search by student id  *");
-        System.out.println("* 6. Read  file            *");
-        System.out.println("* 7. Save file             *");
-        System.out.println("* 8. Display all           *");
-        System.out.println("* 9. Get On Borrowings     *");
-        System.out.println("* 10. Remove all borrowing *");
-        System.out.println("* 11. Remove by borrow id  *");
-        System.out.println("* 12. The most borrow book  *");
-        System.out.println("* 0. Done                  *");
-        System.out.println("============================");
+        System.out.println("==============MENU==============");
+        System.out.println("*     Borrow Management        *");
+        System.out.println("* 1. Add borrow                *");
+        System.out.println("* 2. Return book               *");
+        System.out.println("* 3. Search by borrow id       *");
+//        System.out.println("* 4. Search by book id         *");
+//        System.out.println("* 5. Search by student id      *");
+        System.out.println("* 6. Read  file                *");
+        System.out.println("* 7. Save file                 *");
+        System.out.println("* 8. Display all               *");
+        System.out.println("* 9. Get On Borrowings         *");
+        System.out.println("* 10. Remove all borrowing     *");
+        System.out.println("* 11. Remove by borrow id      *");
+        System.out.println("* 12. The most borrow book     *");
+        System.out.println("* 12. The students borrow most *");
+        System.out.println("* 0. Done                      *");
+        System.out.println("================================");
     }
 
     public void menu() {
@@ -68,6 +69,9 @@ public class BorrowingManagementMenu {
                 case 12:
                     mostBorrowedBook();
                     break;
+                case 13:
+                    studentsBorrowBook();
+                    break;
                 case 99:
                     test();
                     break;
@@ -75,6 +79,11 @@ public class BorrowingManagementMenu {
                     break;
             }
         }
+    }
+
+    private void studentsBorrowBook() {
+        System.out.println("List of students borrow books the most");
+        System.out.println(borrowingManagement.studentsBorrowMost());
     }
 
     private void test() {
@@ -94,7 +103,7 @@ public class BorrowingManagementMenu {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter borrow id remove");
         int borrowIdRemove = scanner.nextInt();
-        borrowingManagement.remoteBorrowing(borrowIdRemove);
+        borrowingManagement.removeBorrowing(borrowIdRemove);
     }
 
     private void removeBorrowing() {
@@ -135,6 +144,7 @@ public class BorrowingManagementMenu {
         borrowingManagement.add(br);
         System.out.println(br.getBorrowId());
     }
+
     public void returnBook(){
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter borrowing ID:");
@@ -142,6 +152,7 @@ public class BorrowingManagementMenu {
         borrowingManagement.returnBook(borrowingID);
 
     }
+
     public void searchByBorrowingId(){
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter borrowing ID:");
@@ -149,6 +160,7 @@ public class BorrowingManagementMenu {
         Borrowing br = borrowingManagement.searchByBorrowingId(borrowingID);
         System.out.println(br);
     }
+
     public void getOnBorrowings(){
         List<Borrowing> onBorrowings = borrowingManagement.getOnBorrowings();
         for( Borrowing br : onBorrowings){
