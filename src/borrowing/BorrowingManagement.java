@@ -59,6 +59,26 @@ public class BorrowingManagement {
         return null;
     }
 
+    public List<Borrowing> searchByStudentId(int studentId) {
+        List<Borrowing> studentArray = new ArrayList<>();
+        for (Borrowing b : borrowings) {
+            if (b.getStudentId() == studentId) {
+                studentArray.add(b);
+            }
+        }
+        return studentArray;
+    }
+
+    public List<Borrowing> searchBookId(String bookId) {
+        List<Borrowing> bookArray = new ArrayList<>();
+        for (Borrowing b : borrowings) {
+            if (b.getBookId().contains(bookId)) {
+                bookArray.add(b);
+            }
+        }
+        return bookArray;
+    }
+
     public List<Borrowing> getOnBorrowings() { // danh sach sach "chua" tra
         List<Borrowing> onBorrowings = new ArrayList<>();
         for (Borrowing br : borrowings) {
@@ -127,8 +147,7 @@ public class BorrowingManagement {
         return false;
     }
 
-    public List<String> mostBorrowedBooks() {
-        List<String> arrays = new ArrayList<>();
+    public String mostBorrowedBooks() {
         Map<Integer, Integer> hashMap = new HashMap<>();
         for (Borrowing br : borrowings) {
             int key = Integer.parseInt(br.getBookId());
@@ -141,13 +160,19 @@ public class BorrowingManagement {
             }
         }
         Map<Integer, Integer> sortedMap = getSortedMap(hashMap);
+        String string = "";
+        for (Map.Entry entry : sortedMap.entrySet()) {
+            string += "Book id: " + entry.getKey() + " time: " +entry.getValue() + "\n";
+        }
+        return string;
+        /*List<String> arrays = new ArrayList<>();
         for (Map.Entry entry : sortedMap.entrySet()) {
             arrays.add("Book id " + entry.getKey() + " time " +entry.getValue() + "\n");
         }
-        return arrays;
+        return arrays;*/
     }
 
-    public List<String> studentsBorrowMost() {
+    public String studentsBorrowMost() {
         // hash map
         Map<Integer, Integer> hashMap = new HashMap<>();
         for (Borrowing br : borrowings) {
@@ -186,11 +211,16 @@ public class BorrowingManagement {
         }
         // hien thi danh sach da sap xep*/
         Map<Integer, Integer> sortedMap = getSortedMap(hashMap);
-        List<String> arrays = new ArrayList<>();
+        String string = "";
+        for (Map.Entry entry : sortedMap.entrySet()) {
+            string += "Student id: " + entry.getKey() + " times: " +entry.getValue() + "\n";
+        }
+        return string;
+        /*List<String> arrays = new ArrayList<>();
         for (Map.Entry entry : sortedMap.entrySet()) {
             arrays.add("Student id " + entry.getKey() + " times " +entry.getValue() + "\n");
         }
-        return arrays;
+        return arrays;*/
     }
 
     private static Map<Integer, Integer> getSortedMap(Map<Integer, Integer> hashMap) {
@@ -221,11 +251,9 @@ public class BorrowingManagement {
         return sortedMap;
     }
 
-    public void test() throws IOException{}
-
-    public List<String> overDue() {
+    public String overDue() {
         //status = false
-        // today - dateBorrow = 7 ngay
+        // today - dateBorrow > 7 ngay
         List<Borrowing> overDueList = new ArrayList<>();
         for (Borrowing br : borrowings) {
             int returnDay = 0;
@@ -238,12 +266,20 @@ public class BorrowingManagement {
                 overDueList.add(br);
             }
         }
-        List<String> arrays = new ArrayList<>();
+        /*List<String> arrays = new ArrayList<>();
         for (Borrowing br : overDueList) {
             arrays.add(br + "\n");
         }
-        return arrays;
+        return arrays.toString();*/
+        String string = "";
+        for (Borrowing b : borrowings) {
+            string += b.toString() + "\n";
+        }
+        return string;
     }
 
+    public void test() throws IOException{}
+    // public String -> return srs += .....
+    // public List<> -> return arrayList -> menu  lap qua List<> foreach
 }
 

@@ -106,7 +106,7 @@ public class BookManagementMenu {
         System.out.println("Enter title");
         String title = scanner.nextLine();
         List<Book> bookList = bookManagement.searchByName(title);
-        for (Book book :bookList) {
+        for (Book book : bookList) {
             System.out.println(book);
         }
     }

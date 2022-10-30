@@ -5,6 +5,7 @@ package borrowing;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -17,8 +18,8 @@ public class BorrowingManagementMenu {
         System.out.println("* 1. Add borrow                *");
         System.out.println("* 2. Return book               *");
         System.out.println("* 3. Search by borrow id       *");
-//        System.out.println("* 4. Search by book id         *");
-//        System.out.println("* 5. Search by student id      *");
+        System.out.println("* 4. Search by book id         *");
+        System.out.println("* 5. Search by student id      *");
         System.out.println("* 6. Read  file                *");
         System.out.println("* 7. Save file                 *");
         System.out.println("* 8. Display all               *");
@@ -48,6 +49,12 @@ public class BorrowingManagementMenu {
                     break;
                 case 3:
                     searchByBorrowingId();
+                    break;
+                case 4:
+                    searchByBookId();
+                    break;
+                case 5:
+                    searchByStudentId();
                     break;
                 case 6:
                     readFile();
@@ -82,6 +89,27 @@ public class BorrowingManagementMenu {
                 default:
                     break;
             }
+        }
+    }
+
+    private void searchByBookId() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter book ID:");
+        String bookID = scanner.nextLine();
+        List<Borrowing> searchByBookId = borrowingManagement.searchBookId(bookID);
+        for (Borrowing b : searchByBookId) {
+            System.out.println(b);
+        }
+    }
+
+    private void searchByStudentId() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter student ID:");
+        int studentID = scanner.nextInt();
+        scanner.nextLine();
+        List<Borrowing> searchStudentIdList = borrowingManagement.searchByStudentId(studentID);
+        for (Borrowing b : searchStudentIdList) {
+            System.out.println(b);
         }
     }
 
@@ -172,6 +200,7 @@ public class BorrowingManagementMenu {
 
     public void getOnBorrowings(){
         List<Borrowing> onBorrowings = borrowingManagement.getOnBorrowings();
+        System.out.println("Unpaid loan list");
         for( Borrowing br : onBorrowings){
             System.out.println(br);
         }
