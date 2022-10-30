@@ -1,5 +1,7 @@
 package borrowing;
 
+import static java.time.temporal.ChronoUnit.DAYS;
+
 import java.io.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -7,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -113,7 +114,17 @@ public class BorrowingManagement {
         return listBorrow;
     }
 
-    public void test() throws IOException{
+    public void removeBorrowingAll() {
+        borrowings.removeAll(borrowings);
+    }
+
+    public boolean removeBorrowing(int borrowId) {
+        Borrowing borrowingRemove = searchByBorrowingId(borrowId);
+        if (borrowingRemove != null) {
+            borrowings.remove(borrowingRemove);
+            return true;
+        }
+        return false;
     }
 
     public List<String> mostBorrowedBooks() {
@@ -210,17 +221,29 @@ public class BorrowingManagement {
         return sortedMap;
     }
 
-    public void removeBorrowingAll() {
-        borrowings.removeAll(borrowings);
+    public void test() throws IOException{}
+
+    public List<String> overDue() {
+        //status = false
+        // today - dateBorrow = 7 ngay
+        List<Borrowing> overDueList = new ArrayList<>();
+        for (Borrowing br : borrowings) {
+            int returnDay = 0;
+            if (br.getDateReturn() == null) {
+                returnDay = (int) DAYS.between(br.getDateBorrow(), LocalDate.now());
+            }else {
+                returnDay = (int) DAYS.between(br.getDateReturn(), br.getDateBorrow());
+            }
+            if (!br.isStatus() && returnDay > 7) {
+                overDueList.add(br);
+            }
+        }
+        List<String> arrays = new ArrayList<>();
+        for (Borrowing br : overDueList) {
+            arrays.add(br + "\n");
+        }
+        return arrays;
     }
 
-    public boolean removeBorrowing(int borrowId) {
-        Borrowing borrowingRemove = searchByBorrowingId(borrowId);
-        if (borrowingRemove != null) {
-            borrowings.remove(borrowingRemove);
-            return true;
-        }
-        return false;
-    }
 }
 
