@@ -1,13 +1,12 @@
 package borrowing;
 
 import java.io.*;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class BorrowingManagement {
@@ -109,6 +108,38 @@ public class BorrowingManagement {
         return listBorrow;
     }
 
+    public void test() throws IOException{
+    }
+    public String mostBorrowedBooks() {
+        // tạo ra 1 mảng chưa id book và tìm kiếm phần tử xuất hiện nhiều nhất trong mảng
+        Map<Integer,Integer> hashMap = new HashMap<>();
+        for (Borrowing br : borrowings) {
+            int key = Integer.parseInt(br.getBookId());
+            if (hashMap.containsKey(key) == false) {
+                hashMap.put(key,1);
+            } else {
+                int value = hashMap.get(key);
+                value++;
+                hashMap.put(key, value);
+            }
+        }
+        for (Map.Entry entry : hashMap.entrySet()) {
+            System.out.println("Book id " + entry.getKey() + " times " + entry.getValue());
+        }
+        return null;
+    }
 
+    public void removeBorrowingAll() {
+        borrowings.removeAll(borrowings);
+    }
+
+    public boolean remoteBorrowing(int borrowId) {
+        Borrowing borrowingRemove = searchByBorrowingId(borrowId);
+        if (borrowingRemove != null) {
+            borrowings.remove(borrowingRemove);
+            return true;
+        }
+        return false;
+    }
 }
 

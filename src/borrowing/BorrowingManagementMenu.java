@@ -5,7 +5,6 @@ package borrowing;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
@@ -24,7 +23,9 @@ public class BorrowingManagementMenu {
         System.out.println("* 7. Save file             *");
         System.out.println("* 8. Display all           *");
         System.out.println("* 9. Get On Borrowings     *");
-//        System.out.println("* 10. Remove borrowing     *");
+        System.out.println("* 10. Remove all borrowing *");
+        System.out.println("* 11. Remove by borrow id  *");
+        System.out.println("* 12. The most borrow book  *");
         System.out.println("* 0. Done                  *");
         System.out.println("============================");
     }
@@ -58,10 +59,46 @@ public class BorrowingManagementMenu {
                 case 9:
                     getOnBorrowings();
                     break;
+                case 10:
+                    removeBorrowing();
+                    break;
+                case 11:
+                    removeByIdBorrow();
+                    break;
+                case 12:
+                    mostBorrowedBook();
+                    break;
+                case 99:
+                    test();
+                    break;
                 default:
                     break;
             }
         }
+    }
+
+    private void test() {
+        try {
+            borrowingManagement.test();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void mostBorrowedBook() {
+        System.out.println("Most borrowed books list");
+        borrowingManagement.mostBorrowedBooks();
+    }
+
+    private void removeByIdBorrow() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter borrow id remove");
+        int borrowIdRemove = scanner.nextInt();
+        borrowingManagement.remoteBorrowing(borrowIdRemove);
+    }
+
+    private void removeBorrowing() {
+        borrowingManagement.removeBorrowingAll();
     }
 
     private void displayAll() {
