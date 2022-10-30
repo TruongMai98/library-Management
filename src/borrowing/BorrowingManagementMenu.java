@@ -87,7 +87,7 @@ public class BorrowingManagementMenu {
 
     private void mostBorrowedBook() {
         System.out.println("Most borrowed books list");
-        borrowingManagement.mostBorrowedBooks();
+        System.out.println(borrowingManagement.mostBorrowedBooks());
     }
 
     private void removeByIdBorrow() {

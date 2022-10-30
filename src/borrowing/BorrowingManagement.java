@@ -4,6 +4,7 @@ import java.io.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -110,8 +111,9 @@ public class BorrowingManagement {
 
     public void test() throws IOException{
     }
-    public String mostBorrowedBooks() {
+    public List<String> mostBorrowedBooks() {
         // tạo ra 1 mảng chưa id book và tìm kiếm phần tử xuất hiện nhiều nhất trong mảng
+        List<String> arrays = new ArrayList<>();
         Map<Integer,Integer> hashMap = new HashMap<>();
         for (Borrowing br : borrowings) {
             int key = Integer.parseInt(br.getBookId());
@@ -124,9 +126,9 @@ public class BorrowingManagement {
             }
         }
         for (Map.Entry entry : hashMap.entrySet()) {
-            System.out.println("Book id " + entry.getKey() + " times " + entry.getValue());
+            arrays.add("Book id " + entry.getKey() + " time " +entry.getValue() + "\n");
         }
-        return null;
+        return arrays;
     }
 
     public void removeBorrowingAll() {
