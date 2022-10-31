@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class BookManagementMenu {
-    BookManagement bookManagement = new BookManagement();
+    BookManagement bookManagement = BookManagement.getBookManagement();
     public void displayMenu() {
         System.out.println("=======Menu==========");
         System.out.println("*  Book Management  *");
@@ -84,21 +84,11 @@ public class BookManagementMenu {
     }
 
     private void saveFile() {
-        try {
-            bookManagement.saveToFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("Error");
-        }
+        bookManagement.saveToFile();
     }
 
     private void readFile() {
-        try {
-            bookManagement.readFromFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("Error");
-        }
+        bookManagement.readFromFile();
     }
 
     private void searchByTitle() {

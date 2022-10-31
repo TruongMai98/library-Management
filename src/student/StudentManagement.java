@@ -6,14 +6,20 @@ import java.util.List;
 
 public class StudentManagement {
     public static final String FILE_PATH = "student.csv";
+    private static StudentManagement studentManagement = new StudentManagement();
+    public static StudentManagement getStudentManagement() {
+        return studentManagement;
+    }
     private List<Student> studentList;
 
-    public StudentManagement() {
+    private StudentManagement() {
         studentList = new ArrayList<>();
+        readFormFile();
     }
 
     public void add(Student s){
         studentList.add(s);
+        saveToFile();
     }
 
     public boolean remove(int id) {
@@ -22,6 +28,7 @@ public class StudentManagement {
             studentList.remove(s);
             return true;
         }
+        saveToFile();
         return false;
     }
 
@@ -44,7 +51,7 @@ public class StudentManagement {
         return studentList1;
     }
 
-    public void saveToFile() throws IOException {
+    public void saveToFile() {
         try {
             FileWriter fileWriter = new FileWriter(FILE_PATH);
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
@@ -59,7 +66,7 @@ public class StudentManagement {
         }
     }
 
-    public void readFormFile() throws IOException{
+    public void readFormFile() {
         studentList.clear();
         try {
             FileReader fileReader = new FileReader(FILE_PATH);
@@ -94,6 +101,7 @@ public class StudentManagement {
         if (student != null) {
             student.setName(newStudents.getName());
         }
+        saveToFile();
     }
 
 }

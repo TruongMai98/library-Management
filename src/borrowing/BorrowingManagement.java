@@ -17,7 +17,11 @@ import java.util.Set;
 
 public class BorrowingManagement {
     private static final String FILE_PATH = "borrowing.csv";
-    List<Borrowing> borrowings;
+    private static BorrowingManagement borrowingManagement = new BorrowingManagement();
+    public static BorrowingManagement getBorrowingManagement() {
+        return borrowingManagement;
+    }
+    private List<Borrowing> borrowings;
 
 
     public BorrowingManagement() {

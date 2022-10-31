@@ -7,10 +7,15 @@ import java.util.List;
 public class BookManagement {
     public static final String FILE_PATH = "book.csv";
     public static final String DATA_PATH = "data.csv";
+    private static BookManagement bookManagement = new BookManagement();
+    public static BookManagement getBookManagement(){
+        return bookManagement;
+    }
     private List<Book> books;
 
-    public BookManagement() {
+    private BookManagement() {
         books = new ArrayList<>();
+        readFromFile();
         /*Book book1 = new Book("1234", "sach doi gio hu", "mai", 1998);
         Book book2 = new Book("1235", "sach giao khoa", "mia", 2000);
         Book book3 = new Book("1236", "sach bai tap", "mike", 2003);
@@ -22,6 +27,7 @@ public class BookManagement {
 
     public void add(Book b) {
         books.add(b);
+        saveToFile();
     }
 
     public boolean remove(String ISBN) {
@@ -30,6 +36,7 @@ public class BookManagement {
             books.remove(b);
             return true;
         }
+        saveToFile();
         return false;
     }
 
@@ -39,6 +46,7 @@ public class BookManagement {
                 return b;
             }
         }
+        saveToFile();
         return null;
     }
 
@@ -52,7 +60,7 @@ public class BookManagement {
         return bookArrayList;
     }
 
-    public void saveToFile() throws IOException {
+    public void saveToFile()  {
         try {
             FileWriter fileWriter = new FileWriter(FILE_PATH);
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
@@ -67,17 +75,35 @@ public class BookManagement {
         }
     }
 
-    public void readFromFile() throws IOException {
+    public void readFromFile()  {
         books.clear();
-        FileReader fileReader = new FileReader(DATA_PATH);
+        FileReader fileReader = null;
+        try {
+            fileReader = new FileReader(FILE_PATH);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
         BufferedReader bufferedReader = new BufferedReader(fileReader);
         String line = "";
-        while ((line = bufferedReader.readLine()) != null) {
+        while (true) {
+            try {
+                if (!((line = bufferedReader.readLine()) != null)) break;
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
             Book book = handleLine(line);
             books.add(book);
         }
-        bufferedReader.close();
-        fileReader.close();
+        try {
+            bufferedReader.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            fileReader.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
     }
 
@@ -102,5 +128,6 @@ public class BookManagement {
             book1.setAuthor(book.getAuthor());
             book1.setYear(book.getYear());
         }
+        saveToFile();
     }
 }

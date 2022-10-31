@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class StudentManagementMenu {
-    StudentManagement studentManagement = new StudentManagement();
+    StudentManagement studentManagement = StudentManagement.getStudentManagement();
     public void displayMenu() {
         System.out.println("=======Menu==========");
         System.out.println("* Student Management*");
@@ -79,21 +79,11 @@ public class StudentManagementMenu {
     }
 
     private void saveFile() {
-        try {
-            studentManagement.saveToFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("Error");
-        }
+        studentManagement.saveToFile();
     }
 
     private void readFile() {
-        try {
-            studentManagement.readFormFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("Error");
-        }
+        studentManagement.readFormFile();
     }
 
     private void searchByName() {
@@ -123,7 +113,7 @@ public class StudentManagementMenu {
         System.out.println("Enter id");
         int id = scanner.nextInt();
         if (studentManagement.remove(id)) {
-            System.out.println("Remove successfull");
+            System.out.println("Remove successful");
         } else {
             System.out.println("Remove fail!!! Check again!");
         }

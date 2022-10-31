@@ -9,8 +9,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import book.Book;
+import book.BookManagement;
+import student.StudentManagement;
+
 public class BorrowingManagementMenu {
     BorrowingManagement borrowingManagement = new BorrowingManagement();
+    BookManagement bookManagement = BookManagement.getBookManagement();
+    StudentManagement studentManagement = new StudentManagement();
 
     public void displayMenu() {
         System.out.println("==============MENU==============");
@@ -134,6 +140,7 @@ public class BorrowingManagementMenu {
     private void mostBorrowedBook() {
         System.out.println("Most borrowed books list");
         System.out.println(borrowingManagement.mostBorrowedBooks());
+        Book check = bookManagement.searchById(borrowingManagement.mostBorrowedBooks());
     }
 
     private void removeByIdBorrow() {
@@ -170,16 +177,31 @@ public class BorrowingManagementMenu {
     public void add(){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         Scanner scanner = new Scanner(System.in);
+
         System.out.println("Enter Student ID: ");
-        int studentID = scanner.nextInt();scanner.nextLine();
+        int studentID = scanner.nextInt();
+        scanner.nextLine();
+        if (studentManagement.searchById(studentID) == null) {
+            System.out.println("Student id not found");
+            add();
+            return;
+        }
+
         System.out.println("Enter book ID");
         String bookID = scanner.nextLine();
+        if (bookManagement.searchById(bookID) == null) {
+            System.out.println("Book id not found");
+            add();
+            return;
+        }
+
         System.out.println("Enter date borrow");
         LocalDate dateBorrow = LocalDate.parse(scanner.nextLine(), formatter);
 
         Borrowing br = new Borrowing(studentID,bookID,dateBorrow);
         borrowingManagement.add(br);
         System.out.println(br.getBorrowId());
+
     }
 
     public void returnBook(){
