@@ -2,7 +2,12 @@ package borrowing;
 
 import static java.time.temporal.ChronoUnit.DAYS;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -14,18 +19,22 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import book.BookManagement;
+
 
 public class BorrowingManagement {
     private static final String FILE_PATH = "borrowing.csv";
     private static BorrowingManagement borrowingManagement = new BorrowingManagement();
+    private BookManagement bookManagement = BookManagement.getBookManagement();
     public static BorrowingManagement getBorrowingManagement() {
         return borrowingManagement;
     }
     private List<Borrowing> borrowings;
 
 
-    public BorrowingManagement() {
+    private BorrowingManagement() {
         borrowings = new ArrayList<>();
+        readFromFile();
         /*Borrowing br1 = new Borrowing(1, "1235", new Date("10/25/2022"));
         Borrowing br2 = new Borrowing(2, "1234", new Date("10/15/2022"));
         Borrowing br3 = new Borrowing(3, "1236", new Date("10/20/2022"));
@@ -41,6 +50,7 @@ public class BorrowingManagement {
 
     public int add(Borrowing b) {// hanh dong muon sach
         borrowings.add(b);
+        saveFile();
         return b.getBorrowId(); // dua ma muon sach cho nguoi dung
     }
 
@@ -52,6 +62,7 @@ public class BorrowingManagement {
         } else {
             System.out.println("Not found id borrow");;
         }
+        saveFile();
     }
 
     public Borrowing searchByBorrowingId(int borrowId) {// tim kiem "don muon sach" bang "ma muon sach"
@@ -93,28 +104,40 @@ public class BorrowingManagement {
         return onBorrowings;
     }
 
-    public void saveFile() throws IOException{
-        FileWriter fileWriter = new FileWriter(FILE_PATH);
-        BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-        for (Borrowing b : borrowings) {
-            bufferedWriter.write(b.toString());
-            bufferedWriter.newLine();
+    public void saveFile() {
+        try {
+            FileWriter fileWriter = new FileWriter(FILE_PATH);
+            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+            for (Borrowing b : borrowings) {
+                bufferedWriter.write(b.toString());
+                bufferedWriter.newLine();
+            }
+            bufferedWriter.close();
+            fileWriter.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
-        bufferedWriter.close();
-        fileWriter.close();
+
     }
 
-    public void readFromFile() throws IOException{
+    public void readFromFile() {
         borrowings.clear();
-        FileReader fileReader = new FileReader(FILE_PATH);
-        BufferedReader bufferedReader = new BufferedReader(fileReader);
-        String line = "";
-        while ((line = bufferedReader.readLine()) != null) {
-            Borrowing borrowing = parseLine(line);
-            borrowings.add(borrowing);
+        try {
+            FileReader fileReader = new FileReader(FILE_PATH);
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            String line = "";
+            while ((line = bufferedReader.readLine()) != null) {
+                Borrowing borrowing = parseLine(line);
+                borrowings.add(borrowing);
+            }
+            bufferedReader.close();
+            fileReader.close();
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
-        bufferedReader.close();
-        fileReader.close();
+
     }
 
     private static Borrowing parseLine(String line) {
@@ -140,6 +163,7 @@ public class BorrowingManagement {
 
     public void removeBorrowingAll() {
         borrowings.removeAll(borrowings);
+        saveFile();
     }
 
     public boolean removeBorrowing(int borrowId) {
@@ -148,6 +172,7 @@ public class BorrowingManagement {
             borrowings.remove(borrowingRemove);
             return true;
         }
+        saveFile();
         return false;
     }
 
@@ -163,17 +188,37 @@ public class BorrowingManagement {
                 hashMap.put(key, value);
             }
         }
-        Map<Integer, Integer> sortedMap = getSortedMap(hashMap);
+
+        int max = Collections.max(hashMap.values());
+        String str ="";
+        for (Map.Entry<Integer, Integer> maps : hashMap.entrySet()) {
+            if (maps.getValue() == max) {
+                str += bookManagement.searchById(String.valueOf(maps.getKey())) + "\n";
+            }
+        }
+        str += "Borrowed Times: " + max + " times\n";
+        return str;
+//        int max = 0;
+//        int result = 0;
+//        for (Map.Entry<Integer, Integer> entry : hashMap.entrySet()) {
+//             if (entry.getValue() > max) {
+//                 max = entry.getValue() ;
+//                 result = entry.getKey();
+//             }
+//        }
+
+//        return "Book id: " + result + " time: " + max + "\n";
+       /* Map<Integer, Integer> sortedMap = getSortedMap(hashMap);
         String string = "";
         for (Map.Entry entry : sortedMap.entrySet()) {
             string += "Book id: " + entry.getKey() + " time: " +entry.getValue() + "\n";
         }
         return string;
-        /*List<String> arrays = new ArrayList<>();
+        *//*List<String> arrays = new ArrayList<>();
         for (Map.Entry entry : sortedMap.entrySet()) {
             arrays.add("Book id " + entry.getKey() + " time " +entry.getValue() + "\n");
         }
-        return arrays;*/
+//        return arrays;*/
     }
 
     public String studentsBorrowMost() {
@@ -219,6 +264,7 @@ public class BorrowingManagement {
         for (Map.Entry entry : sortedMap.entrySet()) {
             string += "Student id: " + entry.getKey() + " times: " +entry.getValue() + "\n";
         }
+        saveFile();
         return string;
         /*List<String> arrays = new ArrayList<>();
         for (Map.Entry entry : sortedMap.entrySet()) {

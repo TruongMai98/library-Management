@@ -5,18 +5,16 @@ package borrowing;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import book.Book;
 import book.BookManagement;
 import student.StudentManagement;
 
 public class BorrowingManagementMenu {
-    BorrowingManagement borrowingManagement = new BorrowingManagement();
+    BorrowingManagement borrowingManagement = BorrowingManagement.getBorrowingManagement();
     BookManagement bookManagement = BookManagement.getBookManagement();
-    StudentManagement studentManagement = new StudentManagement();
+    StudentManagement studentManagement = StudentManagement.getStudentManagement();
 
     public void displayMenu() {
         System.out.println("==============MENU==============");
@@ -139,8 +137,9 @@ public class BorrowingManagementMenu {
 
     private void mostBorrowedBook() {
         System.out.println("Most borrowed books list");
+
         System.out.println(borrowingManagement.mostBorrowedBooks());
-        Book check = bookManagement.searchById(borrowingManagement.mostBorrowedBooks());
+
     }
 
     private void removeByIdBorrow() {
@@ -159,19 +158,11 @@ public class BorrowingManagementMenu {
     }
 
     private void saveFile() {
-        try {
-            borrowingManagement.saveFile();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        borrowingManagement.saveFile();
     }
 
     private void readFile() {
-        try {
-            borrowingManagement.readFromFile();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        borrowingManagement.readFromFile();
     }
 
     public void add(){
