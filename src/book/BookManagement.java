@@ -1,6 +1,6 @@
 package book;
 import interfaces.*;
-import java.io.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,13 +21,13 @@ public class BookManagement {
     public BookManagement() {
         books = new ArrayList<>();
 
-        Book book1 = new Book("1234", "sach doi gio hu", "mai", 1998);
+       /* Book book1 = new Book("1234", "sach doi gio hu", "mai", 1998);
         Book book2 = new Book("1235", "sach giao khoa", "mia", 2000);
         Book book3 = new Book("1236", "sach bai tap", "mike", 2003);
 
         books.add(book1);
         books.add(book2);
-        books.add(book3);
+        books.add(book3);*/
         readFromFile();
     }
 
@@ -82,9 +82,9 @@ public class BookManagement {
         readWriteable.save(FILE_PATH,  books);
     }
 
-    public void readFromFile()  {
+    public void readFromFile() {
         books.clear();
-       books = readWriteable.Read(FILE_PATH);
+        books = readWriteable.Read(FILE_PATH);
     }
 
 

@@ -13,7 +13,7 @@ import book.Book;
 import book.BookManagement;
 
 
-public class BookReadWriteFile implements ReadWriteable{
+public class BookReadWriteFile implements ReadWriteable<Book>{
 
     @Override
     public List<Book> Read(String file) {
@@ -36,7 +36,6 @@ public class BookReadWriteFile implements ReadWriteable{
                 throw new RuntimeException(e);
             }
             Book book = handleLine(line);
-            System.out.println(bookManagement);
             list.add(book);
             //bookManagement.getBooks().add(book);
         }
@@ -63,8 +62,8 @@ public class BookReadWriteFile implements ReadWriteable{
             FileWriter fileWriter = new FileWriter(file);
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
             for (Object object : list) {
-                Book b = (Book)object;
-                bufferedWriter.write(b.toString());
+//                Book b = (Book)object;
+                bufferedWriter.write(object.toString());
                 bufferedWriter.newLine();
             }
             bufferedWriter.close();
