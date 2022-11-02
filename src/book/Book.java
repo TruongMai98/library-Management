@@ -4,7 +4,7 @@ public class Book {
     private String ISBN;
     private String title;
     private String author;
-    private int  year;
+    private int year;
 
     public Book() {
     }

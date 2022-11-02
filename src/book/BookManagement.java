@@ -1,5 +1,5 @@
 package book;
-
+import interfaces.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,18 +11,24 @@ public class BookManagement {
     public static BookManagement getBookManagement(){
         return bookManagement;
     }
+    private ReadWriteable readWriteable = new BookReadWriteFile();
     private List<Book> books;
 
-    private BookManagement() {
+    public List<Book> getBooks() {
+        return books;
+    }
+
+    public BookManagement() {
         books = new ArrayList<>();
-        readFromFile();
-        /*Book book1 = new Book("1234", "sach doi gio hu", "mai", 1998);
+
+        Book book1 = new Book("1234", "sach doi gio hu", "mai", 1998);
         Book book2 = new Book("1235", "sach giao khoa", "mia", 2000);
         Book book3 = new Book("1236", "sach bai tap", "mike", 2003);
 
         books.add(book1);
         books.add(book2);
-        books.add(book3);*/
+        books.add(book3);
+//        readFromFile();
     }
 
     public void add(Book b) {
@@ -60,7 +66,7 @@ public class BookManagement {
     }
 
     public void saveToFile()  {
-        try {
+       /* try {
             FileWriter fileWriter = new FileWriter(FILE_PATH);
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
             for (Book book : books) {
@@ -71,46 +77,16 @@ public class BookManagement {
             fileWriter.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
-        }
+        }*/
+
+        readWriteable.save(FILE_PATH);
     }
 
     public void readFromFile()  {
         books.clear();
-        FileReader fileReader = null;
-        try {
-            fileReader = new FileReader(FILE_PATH);
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-        BufferedReader bufferedReader = new BufferedReader(fileReader);
-        String line = "";
-        while (true) {
-            try {
-                if (!((line = bufferedReader.readLine()) != null)) break;
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            Book book = handleLine(line);
-            books.add(book);
-        }
-        try {
-            bufferedReader.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        try {
-            fileReader.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
+        readWriteable.Read(FILE_PATH);
     }
 
-    public Book handleLine(String line) {
-        String[] strings = line.split(",");
-        return new Book(strings[0], strings[1], strings[2], Integer.parseInt(strings[3]));
-
-    }
 
     public String display() {
         String listBook = "";

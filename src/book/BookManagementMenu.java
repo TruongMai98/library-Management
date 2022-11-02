@@ -1,11 +1,13 @@
 package book;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
 
 public class BookManagementMenu {
+
     BookManagement bookManagement = BookManagement.getBookManagement();
+//    BookManagement bookManagement = new BookManagement();
+
     public void displayMenu() {
         System.out.println("=======Menu==========");
         System.out.println("*  Book Management  *");
