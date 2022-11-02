@@ -1,6 +1,8 @@
 package interfaces;
 
-public interface ReadWriteable {
-    void Read(String file);
-    void save(String file);
+import java.util.List;
+
+public interface ReadWriteable<T> {
+    List Read(String file);
+    void save(String file, List list);
 }

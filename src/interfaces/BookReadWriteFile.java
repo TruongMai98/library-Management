@@ -6,14 +6,19 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import book.Book;
 import book.BookManagement;
 
+
 public class BookReadWriteFile implements ReadWriteable{
-    BookManagement bookManagement = BookManagement.getBookManagement();
+
     @Override
-    public void Read(String file) {
+    public List<Book> Read(String file) {
+        List<Book> list = new ArrayList<>();
+        BookManagement bookManagement = BookManagement.getBookManagement();
         FileReader fileReader = null;
         try {
             fileReader = new FileReader(file);
@@ -32,7 +37,8 @@ public class BookReadWriteFile implements ReadWriteable{
             }
             Book book = handleLine(line);
             System.out.println(bookManagement);
-            bookManagement.getBooks().add(book);
+            list.add(book);
+            //bookManagement.getBooks().add(book);
         }
         try {
             bufferedReader.close();
@@ -44,17 +50,21 @@ public class BookReadWriteFile implements ReadWriteable{
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-
+        return list;
     }
 
+
+
     @Override
-    public void save(String file) {
+    public void save(String file, List list) {
+
+       // BookManagement bookManagement = BookManagement.getBookManagement();
         try {
             FileWriter fileWriter = new FileWriter(file);
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-            for (Book book : bookManagement.getBooks()) {
-                bufferedWriter.write(book.toString());
+            for (Object object : list) {
+                Book b = (Book)object;
+                bufferedWriter.write(b.toString());
                 bufferedWriter.newLine();
             }
             bufferedWriter.close();
@@ -66,6 +76,7 @@ public class BookReadWriteFile implements ReadWriteable{
 
     public Book handleLine(String line) {
         String[] strings = line.split(",");
+
         return new Book(strings[0], strings[1], strings[2], Integer.parseInt(strings[3]));
 
     }

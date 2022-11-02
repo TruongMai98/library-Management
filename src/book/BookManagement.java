@@ -28,7 +28,7 @@ public class BookManagement {
         books.add(book1);
         books.add(book2);
         books.add(book3);
-//        readFromFile();
+        readFromFile();
     }
 
     public void add(Book b) {
@@ -79,12 +79,12 @@ public class BookManagement {
             throw new RuntimeException(e);
         }*/
 
-        readWriteable.save(FILE_PATH);
+        readWriteable.save(FILE_PATH,  books);
     }
 
     public void readFromFile()  {
         books.clear();
-        readWriteable.Read(FILE_PATH);
+       books = readWriteable.Read(FILE_PATH);
     }
 
 

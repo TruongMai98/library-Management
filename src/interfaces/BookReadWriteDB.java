@@ -1,13 +1,15 @@
 package interfaces;
 
-public class BookReadWriteDB implements ReadWriteable{
-    @Override
-    public void Read(String file) {
+import java.util.List;
 
+public class BookReadWriteDB<T> implements ReadWriteable{
+    @Override
+    public List<T> Read(String file) {
+        return null;
     }
 
     @Override
-    public void save(String file) {
+    public void save(String file, List list) {
 
     }
 }
