@@ -55,15 +55,15 @@ public class BookReadWriteFile implements ReadWriteable<Book>{
 
 
     @Override
-    public void save(String file, List list) {
-
+    public void save(String file, List<Book> list) {
        // BookManagement bookManagement = BookManagement.getBookManagement();
         try {
             FileWriter fileWriter = new FileWriter(file);
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-            for (Object object : list) {
-//                Book b = (Book)object;
+            for (Book object : list) {
+//               Book b = (Book)object;
                 bufferedWriter.write(object.toString());
+//                b.getISBN();
                 bufferedWriter.newLine();
             }
             bufferedWriter.close();
