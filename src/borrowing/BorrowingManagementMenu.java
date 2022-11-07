@@ -168,23 +168,28 @@ public class BorrowingManagementMenu {
     public void add(){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         Scanner scanner = new Scanner(System.in);
-
-        System.out.println("Enter Student ID: ");
-        int studentID = scanner.nextInt();
+        
+        int studentID = 0;
+        while (true) {
+            System.out.println("Enter Student ID: ");
+            studentID = scanner.nextInt();
+            if (studentManagement.searchById(studentID) == null ) {
+                System.out.println("Student id not found");
+            } else {
+                break;
+            }
+        }
         scanner.nextLine();
-        if (studentManagement.searchById(studentID) == null) {
-            System.out.println("Student id not found");
-            add();
-            return;
-        }
 
-        System.out.println("Enter book ID");
-        String bookID = scanner.nextLine();
-        if (bookManagement.searchById(bookID) == null) {
-            System.out.println("Book id not found");
-            add();
-            return;
-        }
+        String bookID;
+        do {
+            System.out.println("Enter book ID");
+            bookID = scanner.nextLine();
+            if (bookManagement.searchById(bookID) == null) {
+                System.out.println("Book id not found");
+            }
+        } while (bookManagement.searchById(bookID) == null);
+
 
         System.out.println("Enter date borrow");
         LocalDate dateBorrow = LocalDate.parse(scanner.nextLine(), formatter);
